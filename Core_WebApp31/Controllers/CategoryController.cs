@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Core_WebApp31.Controllers
 {
-    [Authorize]
+   
     public class CategoryController : Controller
     {
         IRepository<Category, int> catRepo;
@@ -18,12 +18,13 @@ namespace Core_WebApp31.Controllers
         {
             this.catRepo = catRepo;
         }
+        [Authorize(Policy = "readpolicy")]
         public async Task<IActionResult> Index()
         {
             var cats = await catRepo.GetAsync();
             return View(cats);
         }
-
+        [Authorize(Policy = "writepolicy")]
         public  IActionResult Create()
         {
             var cat = new Category();

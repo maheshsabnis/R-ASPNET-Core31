@@ -53,8 +53,27 @@ namespace Core_WebApp31
 
 
             // Uawr Based Auth with the User Account Confirmation service
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            //    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            // The AddIdentity<IdentityUser,IdentityRole>(), used to Userand Role Management
+
+            services.AddIdentity<IdentityUser,IdentityRole>()
+               .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
+            // define policies for accessing the controllers
+            services.AddAuthorization(options => {
+                options.AddPolicy("readpolicy", policy =>
+                {
+                    policy.RequireRole("Manager", "Clerk", "Operator");
+                });
+
+                options.AddPolicy("writepolicy", policy =>
+                {
+                    policy.RequireRole("Manager", "Clerk");
+                });
+            });
 
             // register repositories in the DI Contaier
 
@@ -67,7 +86,7 @@ namespace Core_WebApp31
                .AddJsonOptions(options=> {
                    options.JsonSerializerOptions.PropertyNamingPolicy = null;
                }); // MVC + API 
-            services.AddRazorPages(); // WEB Forms, Databinding
+            services.AddRazorPages(); // WEB Forms, Databinding (Used by default for Identity Users for User Management)
             // services.AddControllers(); // API
         }
 
