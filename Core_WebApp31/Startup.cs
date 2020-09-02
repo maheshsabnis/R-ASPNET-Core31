@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Core_WebApp31.Models;
 using Core_WebApp31.Repositories;
 using Core_WebApp31.Services;
+using Core_WebApp31.CustomMiddleware;
 
 namespace Core_WebApp31
 {
@@ -75,6 +76,13 @@ namespace Core_WebApp31
                 });
             });
 
+            // configure the CORS Service for defining policy for the client Access
+            services.AddCors(options => {
+                options.AddPolicy("cors",policy => {
+                    policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                });
+            });
+
             // register repositories in the DI Contaier
 
             services.AddScoped<IRepository<Category,int>, CategoryRepository>();
@@ -119,11 +127,13 @@ namespace Core_WebApp31
             app.UseRouting(); // HTTP Reouting comon for MVC and API
 
             // sessions, cors
+            app.UseCors("cors");
 
             app.UseAuthentication(); // User Auth.
             app.UseAuthorization(); // Role-Based Security + Policy Based Auth + OpenIdConnect
 
             // custom Middleware execution
+            app.UseCustomException();
 
             // Request Processing for Resource (MVC Controller / API Conroller / Page)
             // UseEndpoints() --> map with reverse proxy for acceoting requests and sending responses

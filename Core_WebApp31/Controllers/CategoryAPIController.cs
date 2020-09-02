@@ -13,7 +13,7 @@ namespace Core_WebApp31.Controllers
     [Route("api/[controller]")]
     // Used to accept the Complex JSON Data from HTTP request Body and Map with CLR object
     // uses the Message Formatter deault is JSON
-    [ApiController]
+   [ApiController]
     public class CategoryAPIController : ControllerBase
     {
        
@@ -34,15 +34,27 @@ namespace Core_WebApp31.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var cats = await catRepo.GetAsync(id);
-            return Ok();
+            var cat = await catRepo.GetAsync(id);
+            return Ok(cat);
         }
 
         [HttpPost]
+        //public async Task<IActionResult> Post([FromBody]Category cat)
+        // public async Task<IActionResult> Post(string CategoryId, string CategoryName, int BasePrice)
+        //public async Task<IActionResult> Post([FromQuery] Category cat)
+       // [HttpPost("{CategoryId}/{CategoryName}/{BasePrice}")]
+        // public async Task<IActionResult> Post([FromRoute] Category cat)
         public async Task<IActionResult> Post(Category cat)
         {
+            //var cat = new Category()
+            //{
+            //     CategoryId = CategoryId,
+            //     CategoeyName = CategoryName,
+            //     BasePrice = BasePrice
+            //};
             if (ModelState.IsValid)
             {
+                if (cat.BasePrice < 0) throw new Exception("Base Price cannot be -Ve");
                 cat = await catRepo.CreateAsync(cat);
                 return Ok(cat);
             }

@@ -17,3 +17,19 @@ Categories and Products will be created by users, and the users will be able to 
 categories created by them. The Administrator Role can  Access all information.
   s
 sabnis_m@hotmail.com
+===========================================================================================================
+FormBody
+FromForm
+FromRoute
+FromQuery
+==========================================================================================================
+Angular
+React
+Vue
+Ember
+Preact
+
+
+EX 2: Date 02-Spet-2020
+1. Create a Middleware that will log the errors in database along with the User/Role information for which the 
+exception occured..
